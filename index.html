@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Styx API - Type-safe CLI wrappers</title>
+    <meta name="description" content="Type-safe command line wrappers for modern development" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(96, 165, 250, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(167, 139, 250, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 100%, rgba(139, 92, 246, 0.05) 0%, transparent 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes rainDrop {
+            0% {
+                transform: translateY(0) translateZ(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(calc(100vh + 200px)) translateZ(0);
+                opacity: 0;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes glow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .rain-drop {
+            position: fixed;
+            top: -50px;
+            color: rgba(139, 92, 246, 0.3);
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 18px;
+            font-weight: 400;
+            pointer-events: none;
+            user-select: none;
+            z-index: 1;
+            white-space: nowrap;
+            text-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+        }
+
+        header {
+            text-align: center;
+            padding: 4rem 1rem 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            font-size: clamp(3.5rem, 10vw, 8rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            position: relative;
+            padding-bottom: 0.2em;
+        }
+
+        .title-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .title-main {
+            background: linear-gradient(135deg, #60A5FA 0%, #A78BFA 50%, #F472B6 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: block;
+            filter: drop-shadow(0 0 30px rgba(167, 139, 250, 0.3));
+        }
+
+        .title-shadow {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            background: linear-gradient(135deg, #1e40af 0%, #5b21b6 50%, #be185d 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            color: #94A3B8;
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        main {
+            padding: 3rem 1.5rem 5rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 4rem;
+        }
+
+        @media (min-width: 1024px) {
+            .grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 6rem;
+            }
+        }
+
+        .project {
+            background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 3rem;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .project:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255,255,255,0.1);
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.3),
+                0 0 60px rgba(139, 92, 246, 0.1);
+        }
+
+        .project:hover::before {
+            opacity: 1;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        @media (min-width: 1024px) {
+            .logo-container {
+                justify-content: flex-start;
+            }
+        }
+
+        .logo {
+            width: 5rem;
+            height: 5rem;
+            filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.3));
+            transition: all 0.3s ease;
+        }
+
+        .project:hover .logo {
+            transform: scale(1.1) rotate(5deg);
+            filter: drop-shadow(0 0 30px rgba(139, 92, 246, 0.5));
+        }
+
+        h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .styx-title {
+            background: linear-gradient(135deg, #60A5FA, #3B82F6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .niwrap-title {
+            background: linear-gradient(135deg, #A78BFA, #8B5CF6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .description {
+            font-size: 1.125rem;
+            color: #CBD5E1;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: stretch;
+        }
+
+        @media (min-width: 640px) {
+            .button-group {
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .button-group {
+                justify-content: flex-start;
+            }
+        }
+
+        .button {
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.02em;
+        }
+
+        .button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .button-primary-blue {
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            color: white;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .button-primary-blue:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .button-primary-purple {
+            background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+            color: white;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .button-primary-purple:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+        }
+
+        .button-outline-blue {
+            border: 2px solid #3B82F6;
+            color: #60A5FA;
+            background: transparent;
+            backdrop-filter: blur(10px);
+        }
+
+        .button-outline-blue:hover {
+            background: rgba(59, 130, 246, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2);
+        }
+
+        .button-outline-purple {
+            border: 2px solid #8B5CF6;
+            color: #A78BFA;
+            background: transparent;
+            backdrop-filter: blur(10px);
+        }
+
+        .button-outline-purple:hover {
+            background: rgba(139, 92, 246, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.2);
+        }
+
+        .badges {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        @media (min-width: 1024px) {
+            .badges {
+                justify-content: flex-start;
+            }
+        }
+
+        .badge {
+            padding: 0.375rem 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            font-size: 0.875rem;
+            color: #94A3B8;
+            backdrop-filter: blur(10px);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .badge:nth-child(2) {
+            animation-delay: 2s;
+        }
+
+        .badge:nth-child(3) {
+            animation-delay: 4s;
+        }
+
+        .features {
+            margin-top: 6rem;
+            text-align: center;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature {
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.02);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .feature:hover {
+            background: rgba(255,255,255,0.05);
+            transform: translateY(-3px);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        .feature h3 {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+            color: #E2E8F0;
+        }
+
+        .feature p {
+            font-size: 0.875rem;
+            color: #94A3B8;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <header>
+            <h1 class="title-main">Styx API</h1>
+            <p class="subtitle">Type-safe command line wrappers for modern development</p>
+        </header>
+
+        <main>
+            <div class="container">
+                <div class="grid">
+                    <div class="project">
+                        <div class="logo-container">
+                            <img src="https://github.com/styx-api/styx/blob/main/docs/logo.svg?raw=true" 
+                                 alt="Styx Core Logo" class="logo" />
+                        </div>
+                        <h2 class="styx-title">Styx Core</h2>
+                        <p class="description">
+                            The compiler that generates type-safe bindings for Python, TypeScript, and R from tool descriptions. 
+                            Define your CLI tools once and get language bindings automatically.
+                        </p>
+                        <div class="button-group">
+                            <a href="https://github.com/styx-api/styx" class="button button-primary-blue">
+                                View Repository
+                            </a>
+                            <a href="https://styx-api.github.io/styxbook/" class="button button-outline-blue">
+                                Documentation
+                            </a>
+                        </div>
+                        <div class="badges">
+                            <span class="badge">Python</span>
+                            <span class="badge">TypeScript</span>
+                            <span class="badge">R (Soon)</span>
+                        </div>
+                    </div>
+
+                    <div class="project">
+                        <div class="logo-container">
+                            <img src="https://github.com/styx-api/niwrap/blob/main/logo.png?raw=true" 
+                                 alt="NiWrap Logo" class="logo" />
+                        </div>
+                        <h2 class="niwrap-title">NiWrap</h2>
+                        <p class="description">
+                            Modern neuroimaging made simple. Ready-to-use type-safe wrappers for FSL, ANTs, AFNI, 
+                            FreeSurfer, MRtrix3, and more. No more command-line headaches.
+                        </p>
+                        <div class="button-group">
+                            <a href="https://github.com/styx-api/niwrap" class="button button-primary-purple">
+                                Browse Tools
+                            </a>
+                            <a href="https://styx-api.github.io/styxbook/" class="button button-outline-purple">
+                                Get started
+                            </a>
+                        </div>
+                        <div class="badges">
+                            <span class="badge">FSL</span>
+                            <span class="badge">ANTs</span>
+                            <span class="badge">AFNI</span>
+                            <span class="badge">FreeSurfer</span>
+                            <span class="badge">MRTrix3</span>
+                            <span class="badge">+7 more</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="features">
+                    <h2 style="font-size: 2.5rem; margin-bottom: 1rem; background: linear-gradient(135deg, #60A5FA, #A78BFA); -webkit-background-clip: text; background-clip: text; color: transparent;">
+                        Why Styx?
+                    </h2>
+                    <div class="features-grid">
+                        <div class="feature">
+                            <div class="feature-icon">✨</div>
+                            <h3>Type-Safe APIs</h3>
+                            <p>Leverage full IDE autocompletion and type checking</p>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">🌍</div>
+                            <h3>Cross-Language Support</h3>
+                            <p>Use the same tools in Python, TypeScript, or R</p>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">📦</div>
+                            <h3>Container Integration</h3>
+                            <p>Seamlessly run tools in Docker, Singularity, or other environments</p>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">🎯</div>
+                            <h3>Consistent Interface</h3>
+                            <p>Uniform API design across all neuroimaging packages</p>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">📊</div>
+                            <h3>Structured Outputs</h3>
+                            <p>Organized output paths for simple pipeline creation</p>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">🚀</div>
+                            <h3>Extensive Coverage</h3>
+                            <p>Access tools from FSL, ANTs, FreeSurfer, MRTrix3, and more</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const interfaces = [
+            'fsl.bet', 'fsl.flirt', 'fsl.feat', 'fsl.eddy', 'fsl.topup', 'fsl.melodic', 'fsl.susan', 
+            'fsl.randomise', 'fsl.probtrackx2', 'ants.antsRegistration', 'ants.N4BiasFieldCorrection', 
+            'ants.antsApplyTransforms', 'ants.DenoiseImage', 'ants.ImageMath', 'afni.3dvolreg', 
+            'afni.3dSkullStrip', 'afni.3dDeconvolve', 'afni.3dTshift', 'freesurfer.recon_all', 
+            'freesurfer.mri_convert', 'freesurfer.mris_convert', 'mrtrix3.dwi2fod', 'mrtrix3.tckgen', 
+            'mrtrix3.mrconvert', 'mrtrix3.dwidenoise', 'workbench.wb_command', 'spm.smooth', 
+            'spm.realign', 'minc.mincbet', 'elastix.elastix'
+        ];
+
+        function createRainDrop() {
+            const drop = document.createElement('div');
+            drop.className = 'rain-drop';
+            drop.textContent = interfaces[Math.floor(Math.random() * interfaces.length)];
+            
+            drop.style.left = Math.random() * 100 + '%';
+            
+            const duration = Math.random() * 5 + 8;
+            drop.style.animationDuration = duration + 's';
+            drop.style.animationName = 'rainDrop';
+            drop.style.animationTimingFunction = 'linear';
+            drop.style.animationFillMode = 'forwards';
+            
+            document.body.appendChild(drop);
+            
+            setTimeout(() => {
+                if (drop.parentNode) {
+                    drop.remove();
+                }
+            }, duration * 1000);
+        }
+
+        function startRain() {
+            for (let i = 0; i < 8; i++) {
+                setTimeout(createRainDrop, i * 300);
+            }
+            
+            setInterval(createRainDrop, 600);
+        }
+
+        window.addEventListener('load', startRain);
+    </script>
+</body>
+</html>
