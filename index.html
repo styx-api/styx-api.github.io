@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,7 +29,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: 
+            background:
                 radial-gradient(circle at 20% 50%, rgba(96, 165, 250, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at 80% 50%, rgba(167, 139, 250, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at 50% 100%, rgba(139, 92, 246, 0.05) 0%, transparent 70%);
@@ -36,17 +37,36 @@
             pointer-events: none;
         }
 
+        /* Respect reduced motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+
+            .rain-drop {
+                display: none;
+            }
+        }
+
         @keyframes rainDrop {
             0% {
                 transform: translateY(0) translateZ(0);
                 opacity: 0;
             }
+
             10% {
                 opacity: 0.3;
             }
+
             90% {
                 opacity: 0.3;
             }
+
             100% {
                 transform: translateY(calc(100vh + 200px)) translateZ(0);
                 opacity: 0;
@@ -54,13 +74,27 @@
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         @keyframes glow {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
+
+            0%,
+            100% {
+                opacity: 0.5;
+            }
+
+            50% {
+                opacity: 1;
+            }
         }
 
         .rain-drop {
@@ -75,6 +109,7 @@
             z-index: 1;
             white-space: nowrap;
             text-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+            will-change: transform;
         }
 
         header {
@@ -133,6 +168,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -164,11 +200,11 @@
         }
 
         .project {
-            background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
             backdrop-filter: blur(10px);
             border-radius: 24px;
             padding: 3rem;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -181,16 +217,16 @@
             left: 0;
             right: 0;
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
             opacity: 0;
             transition: opacity 0.3s ease;
         }
 
         .project:hover {
             transform: translateY(-5px);
-            border-color: rgba(255,255,255,0.1);
-            box-shadow: 
-                0 20px 40px rgba(0,0,0,0.3),
+            border-color: rgba(255, 255, 255, 0.1);
+            box-shadow:
+                0 20px 40px rgba(0, 0, 0, 0.3),
                 0 0 60px rgba(139, 92, 246, 0.1);
         }
 
@@ -294,7 +330,7 @@
             width: 0;
             height: 0;
             border-radius: 50%;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             transform: translate(-50%, -50%);
             transition: width 0.6s, height 0.6s;
         }
@@ -368,8 +404,8 @@
 
         .badge {
             padding: 0.375rem 1rem;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
             font-size: 0.875rem;
             color: #94A3B8;
@@ -399,14 +435,14 @@
 
         .feature {
             padding: 1.5rem;
-            background: rgba(255,255,255,0.02);
+            background: rgba(255, 255, 255, 0.02);
             border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.3s ease;
         }
 
         .feature:hover {
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
             transform: translateY(-3px);
         }
 
@@ -429,6 +465,7 @@
         }
     </style>
 </head>
+
 <body>
     <div>
         <header>
@@ -441,12 +478,13 @@
                 <div class="grid">
                     <div class="project">
                         <div class="logo-container">
-                            <img src="https://github.com/styx-api/styx/blob/main/docs/logo.svg?raw=true" 
-                                 alt="Styx Core Logo" class="logo" />
+                            <img src="https://github.com/styx-api/styx/blob/main/docs/logo.svg?raw=true"
+                                alt="Styx Core Logo" class="logo" />
                         </div>
                         <h2 class="styx-title">Styx Core</h2>
                         <p class="description">
-                            The compiler that generates type-safe bindings for Python, TypeScript, and R from tool descriptions. 
+                            The compiler that generates type-safe bindings for Python, TypeScript, and R from tool
+                            descriptions.
                             Define your CLI tools once and get language bindings automatically.
                         </p>
                         <div class="button-group">
@@ -466,12 +504,12 @@
 
                     <div class="project">
                         <div class="logo-container">
-                            <img src="https://github.com/styx-api/niwrap/blob/main/logo.svg?raw=true" 
-                                 alt="NiWrap Logo" class="logo" />
+                            <img src="https://github.com/styx-api/niwrap/blob/main/logo.svg?raw=true" alt="NiWrap Logo"
+                                class="logo" />
                         </div>
                         <h2 class="niwrap-title">NiWrap</h2>
                         <p class="description">
-                            Modern neuroimaging made simple. Ready-to-use type-safe wrappers for FSL, ANTs, AFNI, 
+                            Modern neuroimaging made simple. Ready-to-use type-safe wrappers for FSL, ANTs, AFNI,
                             FreeSurfer, MRtrix3, and more. No more command-line headaches.
                         </p>
                         <div class="button-group">
@@ -494,7 +532,8 @@
                 </div>
 
                 <div class="features">
-                    <h2 style="font-size: 2.5rem; margin-bottom: 1rem; background: linear-gradient(135deg, #60A5FA, #A78BFA); -webkit-background-clip: text; background-clip: text; color: transparent;">
+                    <h2
+                        style="font-size: 2.5rem; margin-bottom: 1rem; background: linear-gradient(135deg, #60A5FA, #A78BFA); -webkit-background-clip: text; background-clip: text; color: transparent;">
                         Why Styx?
                     </h2>
                     <div class="features-grid">
@@ -535,47 +574,105 @@
     </div>
 
     <script>
-        const interfaces = [
-            'fsl.bet', 'fsl.flirt', 'fsl.feat', 'fsl.eddy', 'fsl.topup', 'fsl.melodic', 'fsl.susan', 
-            'fsl.randomise', 'fsl.probtrackx2', 'ants.antsRegistration', 'ants.N4BiasFieldCorrection', 
-            'ants.antsApplyTransforms', 'ants.DenoiseImage', 'ants.ImageMath', 'afni.3dvolreg', 
-            'afni.3dSkullStrip', 'afni.3dDeconvolve', 'afni.3dTshift', 'freesurfer.recon_all', 
-            'freesurfer.mri_convert', 'freesurfer.mris_convert', 'mrtrix3.dwi2fod', 'mrtrix3.tckgen', 
-            'mrtrix3.mrconvert', 'mrtrix3.dwidenoise', 'workbench.wb_command', 'spm.smooth', 
-            'spm.realign', 'minc.mincbet', 'elastix.elastix'
+        // fallback interface names
+        let interfaces = [
+            'fsl.bet', 'fsl.flirt', 'fsl.feat', 'fsl.eddy', 'fsl.topup', 'fsl.melodic', 'fsl.susan',
+            'fsl.randomise', 'fsl.probtrackx2', 'ants.antsRegistration', 'ants.N4BiasFieldCorrection',
+            'ants.antsApplyTransforms', 'ants.DenoiseImage', 'ants.ImageMath', 'afni.3dvolreg',
+            'afni.3dSkullStrip', 'afni.3dDeconvolve', 'afni.3dTshift', 'freesurfer.recon_all',
+            'freesurfer.mri_convert', 'freesurfer.mris_convert', 'mrtrix3.dwi2fod', 'mrtrix3.tckgen',
+            'mrtrix3.mrconvert', 'mrtrix3.dwidenoise', 'workbench.wb_command'
         ];
 
+        let activeDrops = 0;
+        const maxDrops = 8;
+
         function createRainDrop() {
+            if (activeDrops >= maxDrops) return;
+
             const drop = document.createElement('div');
             drop.className = 'rain-drop';
             drop.textContent = interfaces[Math.floor(Math.random() * interfaces.length)];
-            
+
             drop.style.left = Math.random() * 100 + '%';
-            
+
             const duration = Math.random() * 5 + 8;
             drop.style.animationDuration = duration + 's';
             drop.style.animationName = 'rainDrop';
             drop.style.animationTimingFunction = 'linear';
             drop.style.animationFillMode = 'forwards';
-            
+
             document.body.appendChild(drop);
-            
+            activeDrops++;
+
             setTimeout(() => {
                 if (drop.parentNode) {
                     drop.remove();
+                    activeDrops--;
                 }
             }, duration * 1000);
         }
 
+        // safari is the new internet explorer
+        const scheduleTask = 'requestIdleCallback' in window
+            ? requestIdleCallback
+            : (callback) => callback();
+
         function startRain() {
             for (let i = 0; i < 8; i++) {
-                setTimeout(createRainDrop, i * 300);
+                setTimeout(() => scheduleTask(createRainDrop), i * 300);
             }
-            
-            setInterval(createRainDrop, 600);
+
+            setInterval(() => scheduleTask(createRainDrop), 600);
         }
 
-        window.addEventListener('load', startRain);
+        window.addEventListener('load', () => {
+            startRain()
+
+            fetch("https://styx-api.github.io/niwrap/niwrap-ir-dump/index.json")
+                .then(response => response.json())
+                .then(irIndex => {
+                    interfaces = irIndex.packages.flatMap(pkg =>
+                        pkg.apps?.map(app => `${pkg.package.name}.${app.name}`) || []
+                    );
+                })
+                .catch(() => console.warn('Failed to load dynamic interfaces, using fallback:', error)); // fallback to original interfaces
+
+            // Console easter egg
+            console.log(`
+%c   ███████╗████████╗██╗   ██╗██╗  ██╗
+%c   ██╔════╝╚══██╔══╝╚██╗ ██╔╝╚██╗██╔╝
+%c   ███████╗   ██║    ╚████╔╝  ╚███╔╝ 
+%c   ╚════██║   ██║     ╚██╔╝   ██╔██╗ 
+%c   ███████║   ██║      ██║   ██╔╝ ██╗
+%c   ╚══════╝   ╚═╝      ╚═╝   ╚═╝  ╚═╝
+%c
+%c   🧠 Type-safe neuroimaging wrappers
+%c   
+%c   👋 Hey there, developer!
+%c   
+%c   Enjoying the floating interfaces? They're pulled live from our API!
+%c   Check out the tools: https://github.com/styx-api/niwrap
+%c   
+%c   Found a bug? We'd love your contribution! 🚀`,
+                'color: #60A5FA; font-weight: bold;',
+                'color: #60A5FA; font-weight: bold;',
+                'color: #A78BFA; font-weight: bold;',
+                'color: #A78BFA; font-weight: bold;',
+                'color: #F472B6; font-weight: bold;',
+                'color: #F472B6; font-weight: bold;',
+                '',
+                'color: #94A3B8; font-size: 16px;',
+                '',
+                'color: #E2E8F0; font-size: 14px; font-weight: bold;',
+                '',
+                'color: #CBD5E1; font-size: 12px;',
+                'color: #60A5FA; font-size: 12px;',
+                '',
+                'color: #A78BFA; font-size: 12px; font-weight: bold;'
+            );
+        });
     </script>
 </body>
+
 </html>
