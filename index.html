@@ -11,6 +11,44 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f6f8fa;
+            --border-primary: #d0d7de;
+            --border-secondary: #d0d7de;
+            --text-primary: #1f2328;
+            --text-secondary: #656d76;
+            --text-tertiary: #656d76;
+            --accent-primary: #1f883d;
+            --accent-hover: #1a7f37;
+            --accent-blue: #0969da;
+            --card-bg: #f6f8fa;
+            --card-border: #d0d7de;
+            --card-hover: #e1e4e8;
+            --stat-bg: #ffffff;
+            --stat-hover: rgba(9, 105, 218, 0.08);
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --border-primary: #21262d;
+            --border-secondary: #30363d;
+            --text-primary: #f0f6fc;
+            --text-secondary: #c9d1d9;
+            --text-tertiary: #8b949e;
+            --accent-primary: #238636;
+            --accent-hover: #2ea043;
+            --accent-blue: #58a6ff;
+            --card-bg: #161b22;
+            --card-border: #21262d;
+            --card-hover: #30363d;
+            --stat-bg: #0d1117;
+            --stat-hover: rgba(88, 166, 255, 0.05);
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -18,10 +56,11 @@
         }
 
         body {
-            background-color: #0d1117;
-            color: #c9d1d9;
+            background-color: var(--bg-primary);
+            color: var(--text-secondary);
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -39,11 +78,18 @@
 
         /* Header */
         header {
-            border-bottom: 1px solid #21262d;
+            border-bottom: 1px solid var(--border-primary);
             padding: 1.5rem 0;
         }
 
         .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .header-left {
             display: flex;
             align-items: center;
             gap: 1rem;
@@ -57,12 +103,47 @@
         .header-text h1 {
             font-size: 1.25rem;
             font-weight: 600;
-            color: #f0f6fc;
+            color: var(--text-primary);
         }
 
         .header-text p {
             font-size: 0.875rem;
-            color: #8b949e;
+            color: var(--text-tertiary);
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 1px solid var(--border-secondary);
+            border-radius: 6px;
+            padding: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            width: 36px;
+            height: 36px;
+        }
+
+        .theme-toggle:hover {
+            background: var(--card-hover);
+            border-color: var(--text-tertiary);
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            color: var(--text-secondary);
+        }
+
+        .theme-icon {
+            display: none;
+        }
+
+        [data-theme="light"] .theme-icon-sun,
+        [data-theme="dark"] .theme-icon-moon {
+            display: block;
         }
 
         /* Hero */
@@ -73,7 +154,7 @@
         .hero h2 {
             font-size: clamp(2.25rem, 5vw, 3.75rem);
             font-weight: 600;
-            color: #f0f6fc;
+            color: var(--text-primary);
             margin-bottom: 1.5rem;
             letter-spacing: -0.025em;
             line-height: 1.15;
@@ -81,7 +162,7 @@
 
         .hero-description {
             font-size: 1.25rem;
-            color: #c9d1d9;
+            color: var(--text-secondary);
             margin-bottom: 3rem;
             line-height: 1.7;
             max-width: 900px;
@@ -93,12 +174,12 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 0;
             margin: 2.5rem 0 3rem;
-            background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
-            border: 1px solid #30363d;
+            background: var(--stat-bg);
+            border: 1px solid var(--border-secondary);
             border-radius: 8px;
             max-width: 700px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 12px var(--shadow);
         }
 
         .stat {
@@ -107,12 +188,12 @@
             align-items: center;
             justify-content: center;
             padding: 2rem 1.5rem;
-            border-right: 1px solid #21262d;
+            border-right: 1px solid var(--border-primary);
             transition: background-color 0.2s ease;
         }
 
         .stat:hover {
-            background-color: rgba(88, 166, 255, 0.05);
+            background-color: var(--stat-hover);
         }
 
         .stat:last-child {
@@ -122,7 +203,7 @@
         .stat-number {
             font-size: 3.5rem;
             font-weight: 700;
-            color: #58a6ff;
+            color: var(--accent-blue);
             line-height: 1;
             font-family: 'JetBrains Mono', monospace;
             margin-bottom: 0.75rem;
@@ -131,7 +212,7 @@
 
         .stat-label {
             font-size: 0.875rem;
-            color: #8b949e;
+            color: var(--text-tertiary);
             font-weight: 600;
         }
 
@@ -156,24 +237,24 @@
         }
 
         .cta-primary {
-            background-color: #238636;
+            background-color: var(--accent-primary);
             color: #ffffff;
             border-color: rgba(240, 246, 252, 0.1);
         }
 
         .cta-primary:hover {
-            background-color: #2ea043;
+            background-color: var(--accent-hover);
         }
 
         .cta-secondary {
             background-color: transparent;
-            color: #c9d1d9;
-            border-color: #30363d;
+            color: var(--text-secondary);
+            border-color: var(--border-secondary);
         }
 
         .cta-secondary:hover {
-            background-color: #21262d;
-            border-color: #8b949e;
+            background-color: var(--card-bg);
+            border-color: var(--text-tertiary);
         }
 
         /* Core Projects Section */
@@ -188,13 +269,13 @@
         .section-title {
             font-size: 1.75rem;
             font-weight: 600;
-            color: #f0f6fc;
+            color: var(--text-primary);
             margin-bottom: 0.5rem;
         }
 
         .section-subtitle {
             font-size: 1rem;
-            color: #c9d1d9;
+            color: var(--text-secondary);
         }
 
         .grid {
@@ -211,15 +292,15 @@
 
         /* Cards */
         .card {
-            border: 1px solid #21262d;
+            border: 1px solid var(--card-border);
             border-radius: 6px;
             padding: 1.75rem;
-            background-color: #161b22;
+            background-color: var(--card-bg);
             transition: border-color 0.2s ease;
         }
 
         .card:hover {
-            border-color: #30363d;
+            border-color: var(--border-secondary);
         }
 
         .card-header {
@@ -237,11 +318,11 @@
         .card-title {
             font-size: 1.125rem;
             font-weight: 600;
-            color: #f0f6fc;
+            color: var(--text-primary);
         }
 
         .card-description {
-            color: #c9d1d9;
+            color: var(--text-secondary);
             line-height: 1.7;
             margin-bottom: 1.5rem;
         }
@@ -281,28 +362,28 @@
         }
 
         .link-github {
-            background-color: #21262d;
-            color: #c9d1d9;
-            border: 1px solid #30363d;
+            background-color: var(--card-bg);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-secondary);
         }
 
         .link-github:hover {
-            background-color: #30363d;
-            border-color: #8b949e;
+            background-color: var(--card-hover);
+            border-color: var(--text-tertiary);
         }
 
         .link-docs {
-            color: #58a6ff;
+            color: var(--accent-blue);
             border: 1px solid transparent;
         }
 
         .link-docs:hover {
-            border-color: #1f6feb;
+            border-color: var(--accent-blue);
         }
 
         /* Footer */
         footer {
-            border-top: 1px solid #21262d;
+            border-top: 1px solid var(--border-primary);
             padding: 3rem 0 2rem;
             margin-top: 4rem;
         }
@@ -329,7 +410,7 @@
         .footer-section h4 {
             font-size: 0.875rem;
             font-weight: 600;
-            color: #f0f6fc;
+            color: var(--text-primary);
             margin-bottom: 0.75rem;
         }
 
@@ -340,23 +421,24 @@
         }
 
         .footer-link {
-            color: #8b949e;
+            color: var(--text-tertiary);
             text-decoration: none;
             font-size: 0.8125rem;
             transition: color 0.2s ease;
         }
 
         .footer-link:hover {
-            color: #58a6ff;
+            color: var(--accent-blue);
         }
 
         .footer-link-disabled {
-            color: #6e7681;
+            color: var(--text-tertiary);
+            opacity: 0.6;
             cursor: not-allowed;
         }
 
         .footer-bottom {
-            border-top: 1px solid #21262d;
+            border-top: 1px solid var(--border-primary);
             padding-top: 1.5rem;
             display: flex;
             justify-content: space-between;
@@ -367,7 +449,7 @@
 
         .footer-text {
             font-size: 0.8125rem;
-            color: #6e7681;
+            color: var(--text-tertiary);
         }
 
         /* Responsive */
@@ -379,7 +461,7 @@
 
             .stat {
                 border-right: none;
-                border-bottom: 1px solid #21262d;
+                border-bottom: 1px solid var(--border-primary);
             }
 
             .stat:last-child {
@@ -402,11 +484,29 @@
     <header>
         <div class="container">
             <div class="header-content">
-                <img src="https://github.com/styx-api/niwrap/blob/main/logo.svg?raw=true" alt="NiWrap Logo" class="logo" />
-                <div class="header-text">
-                    <h1>NiWrap</h1>
-                    <p>Modern Neuroimaging Made Simple</p>
+                <div class="header-left">
+                    <img src="https://github.com/styx-api/niwrap/blob/main/logo.svg?raw=true" alt="NiWrap Logo" class="logo" />
+                    <div class="header-text">
+                        <h1>NiWrap</h1>
+                        <p>Modern Neuroimaging Made Simple</p>
+                    </div>
                 </div>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                    <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
             </div>
         </div>
     </header>
@@ -595,6 +695,40 @@
     </footer>
 
     <script>
+        // Theme management
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        
+        // Initialize theme from localStorage or system preference
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                html.setAttribute('data-theme', savedTheme);
+            } else {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                html.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+            }
+        }
+        
+        // Toggle theme
+        function toggleTheme() {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+        
+        // Listen for system preference changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                html.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+            }
+        });
+        
+        themeToggle.addEventListener('click', toggleTheme);
+        initTheme();
+
+        // Counter animation
         function animateCount(element, start, target, duration = 1000, suffix = '') {
             const increment = (target - start) / (duration / 16);
             let current = start;
