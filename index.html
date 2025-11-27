@@ -770,26 +770,43 @@
             requestAnimationFrame(update);
         }
 
-        window.addEventListener('load', () => {
-            fetch("https://niwrap.dev/niwrap/niwrap-ir-dump/index.json")
-                .then(response => response.json())
-                .then(irIndex => {
-                    const toolsCount = irIndex.packages.reduce((sum, pkg) =>
-                        sum + (pkg.apps?.length || 0), 0
-                    );
-                    const packagesCount = irIndex.packages.length;
-                    const languagesCount = 3;
+    window.addEventListener('load', async () => {
+        const baseUrl = "https://niwrap.dev/niwrap/source/niwrap";
+        
+        try {
+            const projectRes = await fetch(`${baseUrl}/project.json`);
+            const project = await projectRes.json();
+            
+            const packageNames = project.packages;
+            const packagesCount = packageNames.length;
+            
+            // Fetch each package to get default version, then fetch version.json for apps
+            const toolCounts = await Promise.all(packageNames.map(async (pkgName) => {
+                try {
+                    const pkgRes = await fetch(`${baseUrl}/${pkgName}/package.json`);
+                    const pkg = await pkgRes.json();
+                    const defaultVersion = pkg.default;
+                    
+                    const versionRes = await fetch(`${baseUrl}/${pkgName}/${defaultVersion}/version.json`);
+                    const version = await versionRes.json();
+                    return version.apps?.length || 0;
+                } catch {
+                    return 0;
+                }
+            }));
+            
+            const toolsCount = toolCounts.reduce((sum, count) => sum + count, 0);
+            const languagesCount = 3;
 
-                    animateCount(document.getElementById('tools-count'), 1500, toolsCount, 1200, '+');
-                    animateCount(document.getElementById('packages-count'), 10, packagesCount, 1000);
-                    animateCount(document.getElementById('languages-count'), 2, languagesCount, 800);
-                })
-                .catch(() => {
-                    document.getElementById('tools-count').textContent = '2,000+';
-                    document.getElementById('packages-count').textContent = '12';
-                    document.getElementById('languages-count').textContent = '3';
-                });
-        });
+            animateCount(document.getElementById('tools-count'), 1500, toolsCount, 1200, '+');
+            animateCount(document.getElementById('packages-count'), 10, packagesCount, 1000);
+            animateCount(document.getElementById('languages-count'), 2, languagesCount, 800);
+        } catch {
+            document.getElementById('tools-count').textContent = '2,000+';
+            document.getElementById('packages-count').textContent = '12';
+            document.getElementById('languages-count').textContent = '3';
+        }
+    });
     </script>
 </body>
 
