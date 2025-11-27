@@ -798,7 +798,7 @@
             const toolsCount = toolCounts.reduce((sum, count) => sum + count, 0);
             const languagesCount = 3;
 
-            animateCount(document.getElementById('tools-count'), 1500, toolsCount, 1200, '+');
+            animateCount(document.getElementById('tools-count'), 1500, toolsCount, 1200);
             animateCount(document.getElementById('packages-count'), 10, packagesCount, 1000);
             animateCount(document.getElementById('languages-count'), 2, languagesCount, 800);
         } catch {
