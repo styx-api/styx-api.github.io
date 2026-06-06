@@ -1,0 +1,11 @@
+# https://niwrap.dev/robots.txt
+User-agent: *
+Allow: /
+
+# The /niwrap/ tree is the machine-readable catalog (index.json, per-version
+# catalog.json, descriptors) that the hub fetches at runtime - it's data, not
+# content, so keep it out of the crawl budget. The social card is the exception.
+Disallow: /niwrap/
+Allow: /niwrap/og-image.png
+
+Sitemap: https://niwrap.dev/sitemap.xml

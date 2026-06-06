@@ -5,9 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0d1117">
     <title>NiWrap - Type-safe neuroimaging tools</title>
     <meta name="description"
-        content="Seamless, programmatic access to neuroimaging CLI tools through clean, type-safe APIs in Python, TypeScript, and R" />
+        content="Seamless, programmatic access to FSL, ANTs, AFNI, FreeSurfer, MRtrix3 and more neuroimaging tools through clean, type-safe APIs in Python, TypeScript, and R." />
     <link rel="canonical" href="https://niwrap.dev/" />
     <!-- Open Graph / social previews -->
     <meta property="og:type" content="website" />
@@ -26,6 +29,46 @@
     <meta name="twitter:description"
         content="Use neuroimaging tools directly from Python, TypeScript, or R with IDE autocompletion, type checking, and structured outputs." />
     <meta name="twitter:image" content="https://niwrap.dev/niwrap/og-image.png" />
+    <!-- Structured data (Schema.org) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://niwrap.dev/#organization",
+          "name": "NiWrap",
+          "url": "https://niwrap.dev/",
+          "logo": "https://raw.githubusercontent.com/styx-api/niwrap/main/logo.svg",
+          "sameAs": [
+            "https://github.com/styx-api",
+            "https://discord.gg/QMKUVCFWsR"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://niwrap.dev/#website",
+          "name": "NiWrap",
+          "url": "https://niwrap.dev/",
+          "description": "Type-safe access to neuroimaging CLI tools from Python, TypeScript, and R.",
+          "publisher": { "@id": "https://niwrap.dev/#organization" }
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "NiWrap",
+          "applicationCategory": "DeveloperApplication",
+          "operatingSystem": "Linux, macOS, Windows",
+          "url": "https://niwrap.dev/",
+          "description": "Programmatic access to FSL, ANTs, AFNI, FreeSurfer, MRtrix3 and more neuroimaging tools through clean, type-safe APIs with IDE autocompletion, type checking, and structured outputs.",
+          "programmingLanguage": ["Python", "TypeScript"],
+          "softwareHelp": "https://niwrap.dev/styxbook/",
+          "isAccessibleForFree": true,
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+          "publisher": { "@id": "https://niwrap.dev/#organization" }
+        }
+      ]
+    }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -135,7 +178,8 @@
             height: 40px;
         }
 
-        .header-text h1 {
+        .header-text .brand-name {
+            display: block;
             font-size: 1.25rem;
             font-weight: 600;
             color: var(--text-primary);
@@ -186,7 +230,7 @@
             padding: 5rem 0 4rem;
         }
 
-        .hero h2 {
+        .hero h1 {
             font-size: clamp(2.25rem, 5vw, 3.75rem);
             font-weight: 600;
             color: var(--text-primary);
@@ -521,9 +565,9 @@
             <div class="header-content">
                 <div class="header-left">
                     <img src="https://raw.githubusercontent.com/styx-api/niwrap/main/logo.svg" alt="NiWrap Logo"
-                        class="logo" />
+                        class="logo" width="40" height="40" />
                     <div class="header-text">
-                        <h1>NiWrap</h1>
+                        <span class="brand-name">NiWrap</span>
                         <p>Modern Neuroimaging Made Simple</p>
                     </div>
                 </div>
@@ -552,7 +596,7 @@
     <main>
         <section class="hero">
             <div class="container">
-                <h2>Neuroimaging tools for modern workflows</h2>
+                <h1>Neuroimaging tools for modern workflows</h1>
                 <p class="hero-description">
                     Use neuroimaging tools directly from Python, TypeScript, or R with
                     IDE autocompletion, type checking, and structured outputs.
@@ -599,7 +643,7 @@
                     <div class="card">
                         <div class="card-header">
                             <img src="https://raw.githubusercontent.com/styx-api/niwrap/main/logo.svg" alt="NiWrap Logo"
-                                class="card-icon" />
+                                class="card-icon" width="32" height="32" />
                             <h3 class="card-title">NiWrap Packages</h3>
                         </div>
                         <p class="card-description">
@@ -633,7 +677,7 @@
                     <div class="card">
                         <div class="card-header">
                             <img src="https://raw.githubusercontent.com/styx-api/niwrap/main/logo.svg" alt="Hub Logo"
-                                class="card-icon" />
+                                class="card-icon" width="32" height="32" />
                             <h3 class="card-title">NiWrap Hub</h3>
                         </div>
                         <p class="card-description">
@@ -665,7 +709,7 @@
                     <div class="card">
                         <div class="card-header">
                             <img src="https://raw.githubusercontent.com/styx-api/styx/main/docs/logo.svg" alt="Styx Logo"
-                                class="card-icon" />
+                                class="card-icon" width="32" height="32" />
                             <h3 class="card-title">Styx Compiler</h3>
                         </div>
                         <p class="card-description">
