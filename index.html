@@ -888,17 +888,14 @@
               onmouseover="this.style.opacity = 1"
               onmouseout="this.style.opacity = 0.75"
             >
-              <picture>
-                <source
-                  media="(prefers-color-scheme:dark)"
-                  srcset="/assets/logos/bids-dark.png"
-                />
-                <img
-                  src=/assets/logos/bids-light.png
-                  alt="BIDS"
-                  style="max-height: 48px; max-width: 160px; width: auto"
-                />
-              </picture>
+              <img
+                class="theme-logo"
+                data-light="/assets/logos/bids-light.png"
+                data-dark="/assets/logos/bids-dark.png"
+                src="/assets/logos/bids-light.png"
+                alt="BIDS"
+                style="max-height: 48px; max-width: 160px; width: auto"
+              />
             </div>
             <div
               style="opacity: 0.75; transition: opacity 0.2s ease"
@@ -916,17 +913,14 @@
               onmouseover="this.style.opacity = 1"
               onmouseout="this.style.opacity = 0.75"
             >
-              <picture>
-                <source
-                  media="(prefers-color-scheme:dark)"
-                  srcset="/assets/logos/neurodesk-dark.png"
-                />
-                <img
-                  src="/assets/logos/neurodesk-light.png"
-                  alt="Neurodesk"
-                  style="max-height: 48px; max-width: 160px; width: auto"
-                />
-              </picture>
+              <img
+                class="theme-logo"
+                data-light="/assets/logos/neurodesk-light.png"
+                data-dark="/assets/logos/neurodesk-dark.png"
+                src="/assets/logos/neurodesk-light.png"
+                alt="Neurodesk"
+                style="max-height: 48px; max-width: 160px; width: auto"
+              />
             </div>
             <div
               style="opacity: 0.75; transition: opacity 0.2s ease"
@@ -1039,12 +1033,27 @@
       const html = document.documentElement;
       // Initial theme is set by the inline <head> script (before first paint).
 
+      // Update theme-aware logo sources
+      function updateThemeLogos() {
+        const theme = html.getAttribute("data-theme");
+        document.querySelectorAll(".theme-logo").forEach((img) => {
+          const src = img.getAttribute(`data-${theme}`);
+          if (src) {
+            img.src = src;
+          }
+        });
+      }
+
+      // Set initial logo sources (head script runs before DOM is ready)
+      updateThemeLogos();
+
       // Toggle theme
       function toggleTheme() {
         const currentTheme = html.getAttribute("data-theme");
         const newTheme = currentTheme === "dark" ? "light" : "dark";
         html.setAttribute("data-theme", newTheme);
         localStorage.setItem("theme", newTheme);
+        updateThemeLogos();
       }
 
       // Listen for system preference changes
@@ -1053,6 +1062,7 @@
         .addEventListener("change", (e) => {
           if (!localStorage.getItem("theme")) {
             html.setAttribute("data-theme", e.matches ? "dark" : "light");
+            updateThemeLogos();
           }
         });
 
